@@ -1,53 +1,74 @@
-html, body {
-    background-color: #8FBC8F;
-    color: #556B2F;
-    font-family: 'Roboto', sans-serif;
-    font-size: 100%;
-}
-h1 {
-    font-size: 3rem;
-}
-h2 {
-    font-size: 2.5rem;
-}
-p {
-    font-size: 2rem;
-}
+@import compass
 
-@media screen and (max-width: 50rem) {
-    h1 {
-        font-size:2.5rem;
-    }
-    h2 {
-        font-size: 2rem;
-    }
-    p {
-        font-size: 1.5rem;
-    }
-}
+$terminal-font-size: 18px
+$cursor-size: 28px
 
-@media screen and (max-width: 40rem) {
-    h1 {
-        font-size:2rem;
-    }
-    h2 {
-        font-size: 1.5rem;
-    }
-    p {
-        font-size: 1.2rem;
-    }
-}
+// Font smoothing
+$fs: antialiased
+  
+// Keyframes mixin
+=keyframes($id)
+  @-webkit-keyframes #{$id}
+    @content
+  @-moz-keyframes #{$id}
+    @content
+  @-ms-keyframes #{$id}
+    @content
+  @keyframes #{$id}
+    @content
+  
+// Animation mixin
+=animation($content)
+  -webkit-animation: $content
+  -moz-animation: $content
+  -o-animation: $content
+  animation: $content
+  
+body
+  cursor: text
+  counter-reset: input
+  margin: 20px
+  padding: 0
+  background: lavenderblush
+  -moz-font-smoothing: $fs
+  -webkit-font-smoothing: $fs
+  font-smoothing: $fs
+  background: #002728
 
-@media screen and (max-width: 30rem) {
-    h1 {
-        font-size:1.2rem;
-    }
-    h2 {
-        font-size: 1.2rem;
-    }
-    h2 {
-        font-size: 1rem;
-    }
-
-
-}
+.terminal
+  float: left
+  margin: 0
+  padding: 0
+  font-family: Menlo, Courier New
+  font-size: $terminal-font-size
+  text-rendering: optimizeLegibility
+  font-weight: bold
+  color: white
+  
+  > .terminal--input
+    counter-increment: input
+      
+    &:before
+      content: '[' counter(input) '] $ '
+    
+    &:last-child:after
+      +animation(blink .75s infinite)
+      margin-left: 5px
+      width: $cursor-size
+      content: '|'
+      background: white
+        
+  > .terminal--output
+    &.is-console:before
+      margin-right: 10px
+      content: '>'
+      
+    &.is-not-defined:before
+      content: 'undefined'
+      color: rgba(white, .5)
+        
++keyframes(blink)
+  from
+    opacity: 1
+  to
+    opacity: 0
